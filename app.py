@@ -24,4 +24,4 @@ inputs_df = pd.get_dummies(inputs_df, drop_first=True)
 prediction = cb_loaded.predict(inputs_df)[0]
 
 # Display the prediction to the user
-st.write(f'Predicted selling price: {prediction:.2f} lakhs')
+st.write(f'Predicted selling price: {prediction:.2f} $')

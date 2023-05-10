@@ -5,6 +5,8 @@ from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from catboost import CatBoostRegressor
+from explainerdashboard import RegressionExplainer
+from explainerdashboard import ExplainerDashboard
 import joblib
 
 # Load the dataset
@@ -49,11 +51,11 @@ cb_random.fit(X_train, y_train)
 
 # Evaluate the model on the test set
 predictions = cb_random.predict(X_test)
-sns.displot(y_test-predictions)
+sns.displot(y_test - predictions)
 plt.scatter(y_test, predictions)
 
 # Print the best score and parameters
-print("Best score:", cb.best_score_)
+print("Best score:", cb_random.best_score_)
 
 mse = mean_squared_error(y_test, predictions)
 print("MSE:", mse)
@@ -61,5 +63,11 @@ print("MSE:", mse)
 # Save the model using joblib
 joblib.dump(cb_random.best_estimator_, 'car_price_model.joblib')
 
-# Load the model from the saved file
-loaded_model = joblib.load('car_price_model.joblib')
+X_test = pd.DataFrame(X_test, columns=['Present_Price', 'Kms_Driven', 'Owner', 'Fuel_Type_Diesel',
+                                       'Fuel_Type_Petrol', 'Seller_Type_Individual', 'Transmission_Manual',
+                                       'Age'])
+y_test = pd.DataFrame(y_test, columns=['Selling_Price'])
+
+explainer = RegressionExplainer(cb_random, X_test, y_test)
+
+ExplainerDashboard(explainer).run()
