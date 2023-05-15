@@ -7,7 +7,8 @@ cb_loaded = joblib.load('car_price_model.joblib')
 
 # Define the user input form
 st.write('# Car Price Prediction')
-present_price = st.number_input('Present Price', min_value=0.0, max_value=50.0, step=0.1)
+present_price = st.number_input('Present Price', min_value=0.0, max_value=100000.0)
+present_price = present_price / 58823.53
 kms_driven = st.number_input('Kms Driven', min_value=0, max_value=1000000, step=1000)
 owner = st.selectbox('Owner', [0, 1, 2, 3])
 fuel_type = st.selectbox('Fuel Type', ['Petrol', 'Diesel'])
